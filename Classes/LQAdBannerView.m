@@ -23,7 +23,7 @@
 {
     LQAdBannerView *view = [[LQAdBannerView alloc] initRootViewController:rootViewController height:height];
     [rootViewController.view addSubview:view];
-    [view setFrame:CGRectMake(0, rootViewController.view.height/2.0 - height, rootViewController.view.width,height)];
+    [view setFrame:CGRectMake(0, CGRectGetHeight(rootViewController.view.bounds)/2.0 - height, CGRectGetWidth(rootViewController.view.bounds),height)];
     return view;
 }
 
@@ -31,7 +31,9 @@
 {
     if (self = [super init]) {
         self.rootViewController = rootViewController;
-        [self setHeight:height];
+        CGRect frame = self.frame;
+        frame.size.height = height;
+        self.frame = frame;
         [self addSubview:self.imageView];
         [self addSubview:self.adBanner];
     }
