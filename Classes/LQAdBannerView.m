@@ -9,17 +9,23 @@
 #import "LQAdBannerView.h"
 #import <GoogleMobileAds/GADBannerView.h>
 
-
-
-@interface LQAdBannerView ()<,GADBannerViewDelegate>
+@interface LQAdBannerView ()<GADBannerViewDelegate>
 
 @property (nonatomic, strong) GADBannerView *adBanner;
 @property (nonatomic, weak, nullable)  UIViewController *rootViewController;
-@property (weak, nonatomic) UIImageView *imageView;       // The photo / 照片
+@property (strong, nonatomic) UIImageView *imageView;        
 
 @end
 
 @implementation LQAdBannerView
+
++(instancetype)rootViewController:(UIViewController *)rootViewController height:(CGFloat)height
+{
+    LQAdBannerView *view = [[LQAdBannerView alloc] initRootViewController:rootViewController height:height];
+    [rootViewController.view addSubview:view];
+    [view setFrame:CGRectMake(0, rootViewController.view.height/2.0 - height, rootViewController.view.width,height)];
+    return view;
+}
 
 -(instancetype)initRootViewController:(UIViewController *)rootViewController height:(CGFloat)height
 {
@@ -39,7 +45,6 @@
     [self.imageView setFrame:self.bounds];
 }
 
-//App名字
 - (NSString *)GoodAdUnitID {
     NSString *result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GoodAdUnitID"];
     return result;

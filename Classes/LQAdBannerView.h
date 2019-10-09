@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LQAdBannerView : UIView
 
 -(instancetype)initRootViewController:(UIViewController *)rootViewController height:(CGFloat)height;
++(instancetype)rootViewController:(UIViewController *)rootViewController height:(CGFloat)height;
 
 @end
 
