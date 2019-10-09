@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "LQAdBannerView"
   s.version      = "0.0.1"
-  s.summary      = "LQAdBannerView."
+  s.summary      = "LQAdBannerView"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -118,7 +118,7 @@ Pod::Spec.new do |s|
   #
 
   # s.framework  = "SomeFramework"
-  # s.frameworks = "SomeFramework", "AnotherFramework"
+    s.frameworks = "UIKit", "Foundation" #支持的框架
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
@@ -130,7 +130,7 @@ Pod::Spec.new do |s|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # s.requires_arc = true
+   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency 'Google-Mobile-Ads-SDK'

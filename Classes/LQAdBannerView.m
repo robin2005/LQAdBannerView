@@ -7,14 +7,12 @@
 //
 
 #import "LQAdBannerView.h"
-#import "ZKCycleScrollView.h"
 #import <GoogleMobileAds/GADBannerView.h>
 
 
 
-@interface LQAdBannerView ()<ZKCycleScrollViewDelegate, ZKCycleScrollViewDataSource,GADBannerViewDelegate>
+@interface LQAdBannerView ()<,GADBannerViewDelegate>
 
-@property (nonatomic, strong) ZKCycleScrollView *googleBanner;
 @property (nonatomic, strong) GADBannerView *adBanner;
 @property (nonatomic, weak, nullable)  UIViewController *rootViewController;
 @property (weak, nonatomic) UIImageView *imageView;       // The photo / 照片
@@ -28,30 +26,33 @@
     if (self = [super init]) {
         self.rootViewController = rootViewController;
         [self setHeight:height];
-        [self addSubview:self.googleBanner];
+        [self addSubview:self.imageView];
+        [self addSubview:self.adBanner];
     }
     return self;
 }
 
--(ZKCycleScrollView *)googleBanner{
-    if (!_googleBanner) {
-        _googleBanner = [[ZKCycleScrollView alloc] initWithFrame:CGRectMake(0.f, 0.f, kScreenWidth, self.height)];
-        _googleBanner.delegate = self;
-        _googleBanner.dataSource = self;
-        _googleBanner.itemSpacing = 0;
-        _googleBanner.pageIndicatorTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];;
-        _googleBanner.itemSize = CGSizeMake(kScreenWidth, self.height);
-        [_googleBanner registerCellClass:[ZKCycleScrollViewCell class] forCellWithReuseIdentifier:@"ZKCycleScrollViewCell"];
-        [self addSubview:_googleBanner];
-    }
-    return _googleBanner;
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.adBanner setFrame:self.bounds];
+    [self.imageView setFrame:self.bounds];
 }
+
 //App名字
 - (NSString *)GoodAdUnitID {
     NSString *result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GoodAdUnitID"];
     return result;
 }
 
+-(UIImageView *)imageView
+{
+    if(!_imageView){
+        _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+    }
+    return _imageView;
+}
 
 -(GADBannerView *)adBanner
 {
@@ -64,30 +65,6 @@
         [_adBanner loadRequest: [GADRequest request]];
     }
     return _adBanner;
-}
-
-#pragma mark -- ZKCycleScrollView DataSource
-- (NSInteger)numberOfItemsInCycleScrollView:(ZKCycleScrollView *)cycleScrollView {
-    return 1;
-}
-
-- (__kindof ZKCycleScrollViewCell *)cycleScrollView:(ZKCycleScrollView *)cycleScrollView cellForItemAtIndex:(NSInteger)index {
-    ZKCycleScrollViewCell *cell = [cycleScrollView dequeueReusableCellWithReuseIdentifier:@"ZKCycleScrollViewCell" forIndex:index];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:cycleScrollView.bounds];
-    [cell removeAllSubviews];
-    [cell addSubview:imageView];
-    [imageView setContentMode:UIViewContentModeScaleAspectFill];
-    [imageView setImage:LQAppImageNamed(@"banner")];
-    [cell addSubview:self.adBanner];
-    [self.adBanner setFrame:cycleScrollView.bounds];
-    [self.adBanner mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.adBanner.superview);
-        make.left.mas_equalTo(self.adBanner.superview);
-        make.width.mas_equalTo(kScreenWidth);
-        make.height.mas_equalTo(self.height);
-    }];
-    self.imageView = imageView;
-    return cell;
 }
 
 #pragma mark -- GADBannerViewDelegate
